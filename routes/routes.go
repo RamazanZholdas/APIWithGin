@@ -12,19 +12,12 @@ import (
 )
 
 func GetSongs(c *gin.Context) {
-	if err := c.ShouldBindJSON(&initialData.Songs); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
+	c.Writer.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(c.Writer).Encode(initialData.Songs)
 }
 
 func GetSongById(c *gin.Context) {
-	if err := c.ShouldBindJSON(&initialData.Songs); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
+	c.Writer.Header().Set("Content-Type", "application/json")
 
 	id := c.Param("id")
 	didntFound := false
@@ -42,10 +35,7 @@ func GetSongById(c *gin.Context) {
 }
 
 func CreateSong(c *gin.Context) {
-	if err := c.ShouldBindJSON(&initialData.Songs); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
+	c.Writer.Header().Set("Content-Type", "application/json")
 
 	var song structs.Song
 
@@ -60,10 +50,7 @@ func CreateSong(c *gin.Context) {
 }
 
 func UpdateSong(c *gin.Context) {
-	if err := c.ShouldBindJSON(&initialData.Songs); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
+	c.Writer.Header().Set("Content-Type", "application/json")
 
 	id := c.Param("id")
 	didntFound := false
@@ -95,10 +82,7 @@ func UpdateSong(c *gin.Context) {
 }
 
 func DeleteSong(c *gin.Context) {
-	if err := c.ShouldBindJSON(&initialData.Songs); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
+	c.Writer.Header().Set("Content-Type", "application/json")
 
 	id := c.Param("id")
 	didntFound := false

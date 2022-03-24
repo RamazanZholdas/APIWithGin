@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/RamazanZholdas/APIWithGin/ginLogs"
 	"github.com/RamazanZholdas/APIWithGin/initialData"
 	"github.com/RamazanZholdas/APIWithGin/routes"
@@ -12,13 +14,13 @@ const (
 )
 
 func init() {
-	file := ginLogs.SetupLogOutput()
-	defer file.Close()
-
 	initialData.PutData()
 }
 
 func main() {
+	file := ginLogs.SetupLogOutput()
+	defer file.Close()
+
 	r := gin.New()
 	r.Use(gin.Recovery())
 	r.Use(ginLogs.Logger())
@@ -29,5 +31,6 @@ func main() {
 	r.PUT("/updateSong/:id", routes.UpdateSong)
 	r.DELETE("/deleteSong/:id", routes.DeleteSong)
 
+	fmt.Println("Running on port:", port)
 	r.Run(":" + port)
 }
