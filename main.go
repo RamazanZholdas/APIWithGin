@@ -1,16 +1,10 @@
 package main
 
 import (
-	"time"
-
 	"github.com/RamazanZholdas/APIWithGin/ginLogs"
+	"github.com/RamazanZholdas/APIWithGin/initialData"
 	"github.com/RamazanZholdas/APIWithGin/routes"
-	"github.com/RamazanZholdas/APIWithGin/structs"
 	"github.com/gin-gonic/gin"
-)
-
-var (
-	songs = []structs.Song{}
 )
 
 const (
@@ -21,26 +15,7 @@ func init() {
 	file := ginLogs.SetupLogOutput()
 	defer file.Close()
 
-	songs = append(songs, structs.Song{
-		Name:     "Bohemian Rhapsody",
-		Duration: time.Now(),
-		Genre:    "R&B",
-		Artist: &structs.Artist{
-			FirstName: "Freddie",
-			LastName:  "Mercury",
-			Label:     "Queen",
-		},
-	})
-	songs = append(songs, structs.Song{
-		Name:     "Crazy Train",
-		Duration: time.Now().Add(time.Hour * 3),
-		Genre:    "Metal",
-		Artist: &structs.Artist{
-			FirstName: "Ozzy",
-			LastName:  "Osbourne",
-			Label:     "Black Sabbath",
-		},
-	})
+	initialData.PutData()
 }
 
 func main() {

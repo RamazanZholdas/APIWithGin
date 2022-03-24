@@ -3,6 +3,7 @@ package structs
 import "time"
 
 type Song struct {
+	Id       int       `json:"id"`
 	Name     string    `json:"name"`
 	Duration time.Time `json:"duration"`
 	Genre    string    `json:"genre"`
