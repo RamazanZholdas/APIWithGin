@@ -2,7 +2,7 @@
  - using env:	export GIN_MODE=release
  - using code:	gin.SetMode(gin.ReleaseMode)
 
-[GIN-debug] GET    /getSongs                 --> github.com/RamazanZholdas/APIWithGin/routes.GetSongs (3 handlers)
+[GIN-debug] GET    /getAllSongs              --> github.com/RamazanZholdas/APIWithGin/routes.GetAllSongs (3 handlers)
 [GIN-debug] GET    /getSongById/:id          --> github.com/RamazanZholdas/APIWithGin/routes.GetSongById (3 handlers)
 [GIN-debug] POST   /createSong               --> github.com/RamazanZholdas/APIWithGin/routes.CreateSong (3 handlers)
 [GIN-debug] PUT    /updateSong/:id           --> github.com/RamazanZholdas/APIWithGin/routes.UpdateSong (3 handlers)
@@ -11,9 +11,23 @@
 Please check https://pkg.go.dev/github.com/gin-gonic/gin#readme-don-t-trust-all-proxies for details.
 [GIN-debug] Listening and serving HTTP on :8080
 Status code: 200
-Clients ip address: ::1
+Clients ip address: 127.0.0.1
+Method: POST
+Path: "/createSong"
+Latency: 138.4516ms
+Exact time: Saturday, 27-Aug-22 18:03:24 MSK
+
+Status code: 200
+Clients ip address: 127.0.0.1
 Method: GET
-Path: "/getSongById/1"
-Latency: 17.9114ms
-Exact time: Thursday, 24-Mar-22 13:06:54 +06
+Path: "/getSongById/6"
+Latency: 3.6847ms
+Exact time: Saturday, 27-Aug-22 18:04:55 MSK
+
+Status code: 200
+Clients ip address: 127.0.0.1
+Method: PUT
+Path: "/updateSong/5"
+Latency: 163.2048ms
+Exact time: Saturday, 27-Aug-22 18:06:06 MSK
 

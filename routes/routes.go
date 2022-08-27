@@ -4,33 +4,33 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
-	"strconv"
 
-	"github.com/RamazanZholdas/APIWithGin/initialData"
+	"github.com/RamazanZholdas/APIWithGin/databaseConn"
 	"github.com/RamazanZholdas/APIWithGin/structs"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
-func GetSongs(c *gin.Context) {
+func GetAllSongs(c *gin.Context) {
 	c.Writer.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(c.Writer).Encode(initialData.Songs)
+	var result []structs.Song
+
+	databaseConn.Db.Find(&result)
+	json.NewEncoder(c.Writer).Encode(result)
 }
 
 func GetSongById(c *gin.Context) {
 	c.Writer.Header().Set("Content-Type", "application/json")
 
 	id := c.Param("id")
-	didntFound := false
 
-	for index := range initialData.Songs {
-		if strconv.Itoa(initialData.Songs[index].Id) == id {
-			json.NewEncoder(c.Writer).Encode(initialData.Songs[index])
-			didntFound = true
-			break
-		}
-	}
-	if !didntFound {
+	var song structs.Song
+
+	query := databaseConn.Db.First(&song, id)
+	if errors.Is(query.Error, gorm.ErrRecordNotFound) {
 		c.JSON(http.StatusBadRequest, gin.H{"id does not exist": errors.New("song does not exist")})
+	} else {
+		json.NewEncoder(c.Writer).Encode(song)
 	}
 }
 
@@ -41,66 +41,55 @@ func CreateSong(c *gin.Context) {
 
 	err := json.NewDecoder(c.Request.Body).Decode(&song)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"id does not exist": errors.New("song does not exist")})
+		c.JSON(http.StatusBadRequest, gin.H{"Json": errors.New("cant decode")})
 		return
 	}
 
-	initialData.Songs = append(initialData.Songs, song)
-	json.NewEncoder(c.Writer).Encode(initialData.Songs)
+	databaseConn.Db.Select("Name", "Duration", "Genre", "Artist").Create(&song)
+	json.NewEncoder(c.Writer).Encode(song)
 }
 
 func UpdateSong(c *gin.Context) {
 	c.Writer.Header().Set("Content-Type", "application/json")
 
 	id := c.Param("id")
-	didntFound := false
 
-	for index := range initialData.Songs {
-		if strconv.Itoa(initialData.Songs[index].Id) == id {
-			initialData.Songs = remove(initialData.Songs, index)
+	var song structs.Song
+	var updatedSong structs.SimpleSong
 
-			var song structs.Song
-
-			err := json.NewDecoder(c.Request.Body).Decode(&song)
-			if err != nil {
-				c.JSON(http.StatusBadRequest, gin.H{"id does not exist": errors.New("song does not exist")})
-				return
-			}
-
-			initialData.Songs = append(initialData.Songs, song)
-			json.NewEncoder(c.Writer).Encode(initialData.Songs)
-
-			didntFound = true
-			break
-		}
-	}
-
-	if !didntFound {
+	query := databaseConn.Db.First(&song, id)
+	if errors.Is(query.Error, gorm.ErrRecordNotFound) {
 		c.JSON(http.StatusBadRequest, gin.H{"id does not exist": errors.New("song does not exist")})
-	}
+	} else {
+		err := json.NewDecoder(c.Request.Body).Decode(&updatedSong)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"Json": errors.New("cant decode")})
+			return
+		}
 
+		song.Name = updatedSong.Name
+		song.Artist = updatedSong.Artist
+		song.Genre = updatedSong.Genre
+		song.Duration = updatedSong.Duration
+		databaseConn.Db.Save(&song)
+
+		json.NewEncoder(c.Writer).Encode(updatedSong)
+	}
 }
 
 func DeleteSong(c *gin.Context) {
 	c.Writer.Header().Set("Content-Type", "application/json")
 
 	id := c.Param("id")
-	didntFound := false
 
-	for index := range initialData.Songs {
-		if strconv.Itoa(initialData.Songs[index].Id) == id {
-			initialData.Songs = remove(initialData.Songs, index)
-			didntFound = true
-			break
-		}
+	var song structs.Song
+
+	query := databaseConn.Db.First(&song, id)
+	if errors.Is(query.Error, gorm.ErrRecordNotFound) {
+		c.JSON(http.StatusBadRequest, gin.H{"id does not exist": errors.New("song does not exist")})
+	} else {
+		databaseConn.Db.Delete(&song)
+
+		json.NewEncoder(c.Writer).Encode("song deleted")
 	}
-	if !didntFound {
-		c.String(http.StatusBadRequest, "id does not exist")
-	}
-
-	json.NewEncoder(c.Writer).Encode(initialData.Songs)
-}
-
-func remove(slice []structs.Song, s int) []structs.Song {
-	return append(slice[:s], slice[s+1:]...)
 }

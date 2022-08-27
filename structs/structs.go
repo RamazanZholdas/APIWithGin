@@ -1,17 +1,20 @@
 package structs
 
-import "time"
+import (
+	"gorm.io/gorm"
+)
 
 type Song struct {
-	Id       int       `json:"id"`
-	Name     string    `json:"name"`
-	Duration time.Time `json:"duration"`
-	Genre    string    `json:"genre"`
-	Artist   *Artist   `json:"artist"`
+	gorm.Model
+	Name     string `json:"name"`
+	Duration string `json:"duration"`
+	Genre    string `json:"genre"`
+	Artist   string `json:"artist"`
 }
 
-type Artist struct {
-	FirstName string `json:"first_name"`
-	LastName  string `json:"last_name"`
-	Label     string `json:"label"`
+type SimpleSong struct {
+	Name     string `json:"name"`
+	Duration string `json:"duration"`
+	Genre    string `json:"genre"`
+	Artist   string `json:"artist"`
 }

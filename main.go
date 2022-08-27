@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 
+	"github.com/RamazanZholdas/APIWithGin/databaseConn"
 	"github.com/RamazanZholdas/APIWithGin/ginLogs"
-	"github.com/RamazanZholdas/APIWithGin/initialData"
 	"github.com/RamazanZholdas/APIWithGin/routes"
 	"github.com/gin-gonic/gin"
 )
@@ -14,7 +14,8 @@ const (
 )
 
 func init() {
-	initialData.PutData()
+	databaseConn.ConnectToDB()
+	databaseConn.SyncDB()
 }
 
 func main() {
@@ -25,7 +26,7 @@ func main() {
 	r.Use(gin.Recovery())
 	r.Use(ginLogs.Logger())
 
-	r.GET("/getSongs", routes.GetSongs)
+	r.GET("/getAllSongs", routes.GetAllSongs)
 	r.GET("/getSongById/:id", routes.GetSongById)
 	r.POST("/createSong", routes.CreateSong)
 	r.PUT("/updateSong/:id", routes.UpdateSong)
