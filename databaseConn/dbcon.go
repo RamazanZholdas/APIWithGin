@@ -13,7 +13,7 @@ var (
 )
 
 func ConnectToDB() {
-	dns := "root:Vip-2001@tcp(127.0.0.1:3306)/restapiproject?parseTime=true"
+	dns := "root:fsdfas1341231@tcp(127.0.0.1:3306)/restapiproject?parseTime=true"
 	Db, err = gorm.Open(mysql.Open(dns), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect database")
