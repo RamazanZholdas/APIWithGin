@@ -7,6 +7,7 @@ import (
 	"github.com/RamazanZholdas/APIWithGin/ginLogs"
 	"github.com/RamazanZholdas/APIWithGin/routes"
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
 const (
@@ -14,6 +15,7 @@ const (
 )
 
 func init() {
+	godotenv.Load()
 	databaseConn.ConnectToDB()
 	databaseConn.SyncDB()
 }

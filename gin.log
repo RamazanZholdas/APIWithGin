@@ -12,22 +12,8 @@ Please check https://pkg.go.dev/github.com/gin-gonic/gin#readme-don-t-trust-all-
 [GIN-debug] Listening and serving HTTP on :8080
 Status code: 200
 Clients ip address: 127.0.0.1
-Method: POST
-Path: "/createSong"
-Latency: 138.4516ms
-Exact time: Saturday, 27-Aug-22 18:03:24 MSK
-
-Status code: 200
-Clients ip address: 127.0.0.1
 Method: GET
-Path: "/getSongById/6"
-Latency: 3.6847ms
-Exact time: Saturday, 27-Aug-22 18:04:55 MSK
-
-Status code: 200
-Clients ip address: 127.0.0.1
-Method: PUT
-Path: "/updateSong/5"
-Latency: 163.2048ms
-Exact time: Saturday, 27-Aug-22 18:06:06 MSK
+Path: "/getAllSongs"
+Latency: 1.6238ms
+Exact time: Sunday, 28-Aug-22 17:10:07 MSK
 
