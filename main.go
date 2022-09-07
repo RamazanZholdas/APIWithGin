@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"os"
 
 	"github.com/RamazanZholdas/APIWithGin/databaseConn"
 	"github.com/RamazanZholdas/APIWithGin/ginLogs"
@@ -10,12 +12,11 @@ import (
 	"github.com/joho/godotenv"
 )
 
-const (
-	port = "80"
-)
-
 func init() {
-	godotenv.Load()
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Cannot load .env file:\n", err)
+	}
 	databaseConn.ConnectToDB()
 	databaseConn.SyncDB()
 }
@@ -34,6 +35,6 @@ func main() {
 	r.PUT("/updateSong/:id", routes.UpdateSong)
 	r.DELETE("/deleteSong/:id", routes.DeleteSong)
 
-	fmt.Println("Running on port:", port)
-	r.Run(":" + port)
+	fmt.Println("Running on port:", os.Getenv("PORT"))
+	r.Run(":" + os.Getenv("PORT"))
 }
