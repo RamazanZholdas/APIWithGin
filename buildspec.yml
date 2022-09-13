@@ -1,21 +1,29 @@
 version: 0.2
+
 phases:
-  install: 
-    runtime-versions:
-      golang: 1.17
+  install:
     commands:
-      - go get -u golang.org/x/lint/golint
-
-  pre_build: 
-    commands:
-      - golint -set_exit_status
-      - go test
-
+      - echo GOPATH - $GOPATH
+      - export THEGOPATH=`echo $GOPATH | cut -c 5-`
+      - echo THEGOPATH = $THEGOPATH
+      - mkdir -p ${THEGOPATH}/src/APIWithGin
+      - echo Copy source files to go root
+      - cp -a ${CODEBUILD_SRC_DIR}/. ${THEGOPATH}/src/APIWithGin
+      - ls ${THEGOPATH}/src/
   build:
     commands:
-      - go build -o app
+      - echo Build started on `date`
+      - echo Getting packages
+      - go get ./...
+      - echo DOING THE BUILD
+      - go build -ldflags "" -o "appname"
+      - go test ./...
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - ls -al
+      - pwd
 
 artifacts:
   files:
-    - app
-    - buildspec.yml
+    - appname
