@@ -8,7 +8,7 @@ phases:
       - echo THEGOPATH = $THEGOPATH
       - mkdir -p ${THEGOPATH}/src/APIWithGin
       - echo Copy source files to go root
-      - cp -a ${CODEBUILD_SRC_DIR}/. ${THEGOPATH}/src/APIWithGin
+#      - cp -a ${CODEBUILD_SRC_DIR}/. ${THEGOPATH}/src/APIWithGin/
       - ls ${THEGOPATH}/src/
   build:
     commands:
