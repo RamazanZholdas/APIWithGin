@@ -17,10 +17,11 @@ var (
 	password   = os.Getenv("PASSWORD")
 	dbEndpoint = os.Getenv("DB_ENDPOINT")
 	dbName     = os.Getenv("DB_NAME")
+	dbPort     = os.Getenv("DBPORT")
 )
 
 func ConnectToDB() {
-	dns := fmt.Sprintf("%s:%s@tcp(%s)/%s?parseTime=true", user, password, dbEndpoint, dbName)
+	dns := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true", user, password, dbEndpoint, dbPort, dbName)
 	Db, err = gorm.Open(mysql.Open(dns), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect database")
