@@ -10,10 +10,3 @@
 [GIN-debug] [WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.
 Please check https://pkg.go.dev/github.com/gin-gonic/gin#readme-don-t-trust-all-proxies for details.
 [GIN-debug] Listening and serving HTTP on :8080
-Status code: 200
-Clients ip address: 127.0.0.1
-Method: GET
-Path: "/getAllSongs"
-Latency: 1.6238ms
-Exact time: Sunday, 28-Aug-22 17:10:07 MSK
-

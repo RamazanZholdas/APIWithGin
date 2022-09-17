@@ -2,6 +2,7 @@ package databaseConn
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/RamazanZholdas/APIWithGin/structs"
@@ -11,17 +12,25 @@ import (
 )
 
 var (
-	err        error
-	Db         *gorm.DB
-	user       = os.Getenv("USER")
-	password   = os.Getenv("PASSWORD")
-	dbEndpoint = os.Getenv("DB_ENDPOINT")
-	dbName     = os.Getenv("DB_NAME")
-	dbPort     = os.Getenv("DBPORT")
+	err error
+	Db  *gorm.DB
 )
 
+func writeToFile(dns string) {
+	file, err := os.Create("dns.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+	_, err = file.WriteString(dns)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
 func ConnectToDB() {
-	dns := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true", user, password, dbEndpoint, dbPort, dbName)
+	dns := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true", os.Getenv("MYSQL_USER"), os.Getenv("PASSWORD"), os.Getenv("ENDPOINT"), os.Getenv("DBPORT"), os.Getenv("DB"))
+	go writeToFile(dns)
 	Db, err = gorm.Open(mysql.Open(dns), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect database")

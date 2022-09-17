@@ -19,9 +19,11 @@ func init() {
 	}
 	databaseConn.ConnectToDB()
 	databaseConn.SyncDB()
+	//helper.CreateFile("DNS.txt")
 }
 
 func main() {
+	//defer helper.File.Close()
 	file := ginLogs.SetupLogOutput()
 	defer file.Close()
 
