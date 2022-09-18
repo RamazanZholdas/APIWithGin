@@ -1,10 +1,18 @@
 version: 0.0
 os: linux
 files:
-  - source: /
-    destination: /home/ec2-user/app
+  - source: /main.go
+    destination: /app/
 hooks:
+  BeforeInstall:
+    - location: scripts/cleanup.sh
+      timeout: 180
+      runas: root
+  AfterInstall:
+    - location: scripts/build.sh
+      timeout: 180
+      runas: root
   ApplicationStart:
-    - location: codedeploy/ApplicationStart.sh
-  ApplicationStop:
-    - location: codedeploy/ApplicationStop.sh
+    - location: scripts/start.sh
+      timeout: 180
+      runas: root
