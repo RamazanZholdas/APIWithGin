@@ -2,4 +2,7 @@ run:
 	go run main.go
 
 build:
-	go build -o /home/gto/golangProjects/src/APIWithGin/bin
+	go build 
+
+runBin:
+	go run .
