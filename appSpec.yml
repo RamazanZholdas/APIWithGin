@@ -4,15 +4,15 @@ files:
   - source: /main.go
     destination: /app/
 hooks:
-  BeforeInstall:
-    - location: scripts/cleanup.sh
-      timeout: 180
-      runas: root
-  AfterInstall:
-    - location: scripts/build.sh
+  ApplicationStop:
+    - location: scripts/stop.sh
       timeout: 180
       runas: root
   ApplicationStart:
     - location: scripts/start.sh
+      timeout: 180
+      runas: root
+  Install:
+    - location: scripts/install.sh 
       timeout: 180
       runas: root

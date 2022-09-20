@@ -1,2 +1,4 @@
 #!/bin/bash
-/app/main.go > /dev/null 2> /dev/null < /dev/null &
+systemctl daemon-reload
+systemctl enable appgo.service
+systemctl start appgo.service
