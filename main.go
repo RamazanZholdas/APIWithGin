@@ -7,6 +7,7 @@ import (
 
 	"github.com/RamazanZholdas/APIWithGin/databaseConn"
 	"github.com/RamazanZholdas/APIWithGin/ginLogs"
+	"github.com/RamazanZholdas/APIWithGin/middleware"
 	"github.com/RamazanZholdas/APIWithGin/routes"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -18,18 +19,17 @@ func init() {
 		log.Fatal("Cannot load .env file:\n", err)
 	}
 	databaseConn.ConnectToDB()
-	databaseConn.SyncDB()
-	//helper.CreateFile("DNS.txt")
+	databaseConn.MigrateModelToDB()
 }
 
 func main() {
-	//defer helper.File.Close()
 	file := ginLogs.SetupLogOutput()
 	defer file.Close()
 
 	r := gin.New()
 	r.Use(gin.Recovery())
 	r.Use(ginLogs.Logger())
+	r.Use(middleware.SetCorsMiddleware())
 
 	r.GET("/getAllSongs", routes.GetAllSongs)
 	r.GET("/getSongById/:id", routes.GetSongById)

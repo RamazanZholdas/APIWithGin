@@ -37,6 +37,6 @@ func ConnectToDB() {
 	}
 }
 
-func SyncDB() {
+func MigrateModelToDB() {
 	Db.AutoMigrate(&structs.Song{})
 }
