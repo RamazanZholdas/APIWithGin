@@ -1,9 +1,12 @@
 package main
 
 import (
-	"fmt"
+	"context"
 	"log"
-	"os"
+	"net/http"
+	"os/signal"
+	"syscall"
+	"time"
 
 	"github.com/RamazanZholdas/APIWithGin/databaseConn"
 	"github.com/RamazanZholdas/APIWithGin/ginLogs"
@@ -23,20 +26,44 @@ func init() {
 }
 
 func main() {
+	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
+	defer stop()
+
 	file := ginLogs.SetupLogOutput()
 	defer file.Close()
 
-	r := gin.New()
-	r.Use(gin.Recovery())
-	r.Use(ginLogs.Logger())
-	r.Use(middleware.SetCorsMiddleware())
+	router := gin.New()
+	router.Use(gin.Recovery())
+	router.Use(ginLogs.Logger())
+	router.Use(middleware.SetCorsMiddleware())
 
-	r.GET("/getAllSongs", routes.GetAllSongs)
-	r.GET("/getSongById/:id", routes.GetSongById)
-	r.POST("/createSong", routes.CreateSong)
-	r.PUT("/updateSong/:id", routes.UpdateSong)
-	r.DELETE("/deleteSong/:id", routes.DeleteSong)
+	router.GET("/getAllSongs", routes.GetAllSongs)
+	router.GET("/getSongById/:id", routes.GetSongById)
+	router.POST("/createSong", routes.CreateSong)
+	router.PUT("/updateSong/:id", routes.UpdateSong)
+	router.DELETE("/deleteSong/:id", routes.DeleteSong)
 
-	fmt.Println("Running on port:", os.Getenv("PORT"))
-	r.Run(":" + os.Getenv("PORT"))
+	srv := &http.Server{
+		Addr:    ":8080",
+		Handler: router,
+	}
+
+	go func() {
+		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			log.Fatalf("listen: %s\n", err)
+		}
+	}()
+
+	<-ctx.Done()
+
+	stop()
+	log.Println("shutting down gracefully, press Ctrl+C again to force")
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	if err := srv.Shutdown(ctx); err != nil {
+		log.Fatal("Server forced to shutdown: ", err)
+	}
+
+	log.Println("Server exiting")
 }
