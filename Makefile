@@ -5,4 +5,5 @@ build:
 	go build 
 
 runBin:
-	go run .
+	go build
+	./APIWithGin
