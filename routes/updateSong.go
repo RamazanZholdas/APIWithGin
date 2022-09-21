@@ -11,9 +11,17 @@ import (
 	"gorm.io/gorm"
 )
 
+/*
+	Send id in url parameter Example: localhost/updateSong?id=1
+	Json format:
+	{
+		"name":"example",
+		"duration":"example",
+		"genre":"example",
+		"artist":"example"
+	}
+*/
 func UpdateSong(c *gin.Context) {
-	c.Writer.Header().Set("Content-Type", "application/json")
-
 	id := c.Param("id")
 
 	var song structs.Song

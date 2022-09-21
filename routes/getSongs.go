@@ -18,9 +18,8 @@ func GetAllSongs(c *gin.Context) {
 	json.NewEncoder(c.Writer).Encode(result)
 }
 
+//Send id in url parameter Example: localhost/getSongById?id=1
 func GetSongById(c *gin.Context) {
-	c.Writer.Header().Set("Content-Type", "application/json")
-
 	id := c.Param("id")
 
 	var song structs.Song

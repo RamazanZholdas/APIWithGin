@@ -20,8 +20,6 @@ import (
 	}
 */
 func CreateSong(c *gin.Context) {
-	c.Writer.Header().Set("Content-Type", "application/json")
-
 	var song structs.Song
 
 	err := json.NewDecoder(c.Request.Body).Decode(&song)
